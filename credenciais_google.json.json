@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "eminent-wares-459317-j6",
+  "private_key_id": "38efa4537c6bcc846d981fc9c73861200734b7fa",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDDiWCoB3RTqGGm\nKdSFHeNsIaE66fDFVdkq7fU7+icPywXCJylpPp+a59NbhR7npy2UhTd9JXzYV6gC\nx39nmvKlHEIPe8Rb38eE3egFxPSHlF+8K+pKxbYt6Q32Knu41qben44805i1VZEL\n65HcxQpFdcoW3MQodaCUbLEKAzS9aAcmvdybwaSe+WnnnKRf4OjvpG2kfyytpieD\nXdkM32X6r7wyvXu+NpJhDFoa9ssyaNYTUn5ptIUC9s93+BrqMCIIpG6S2wzsSgof\nky3KfN++Xr5gRDqRrU/5sNnJdFq3KmUOiLeTjtcCKZEk4UrNyovnMRr0Uq6BuvGN\nmt3oe8pjAgMBAAECggEAS5B27Gh5EW1UU0D+EnVi8mIqqxhGBhSviJIN/+AjoUxN\njOLSc4wSZOwq90bCEza9fBRhRbkrfnWdhXlwKGsuUxVRCCfF0dVwhs20wSoEb7Ks\nrozwDXZLeYGDdjqjtmIpeYYCk0oYTRdkps0iAMWauw4Si3RET/hpFoLMhfiINJtm\nQGufY0jUnptrkM4oSu/sLcfiuFKEQfHAyJvf5EmH2tY8D8TvY09TMXXbYJyl01GM\nq+Pc+M/X8e4Pm45AlfCdkZD7niGcKheeakBmQ5i+ehFXKd2+vTme7jxNfyQ50eki\nE5ITEgqvAjwDKwmkJbGB0VUcqnIjKRdLJgMbHnXqbQKBgQDu24fAvQIytsNIeeeL\nZybARkO9UrYfi5I+cBxYFKm1UBx81BgBKfXKAHdkgBn2gEgeDP637Z8iLRtlBfnZ\nP9m+OPz9ib1daOaRG6GS5ZefGZC5ZVqdPuL14JkBeNeOSIuXZhawwQFONVMyrnKE\n1vjvbuhoj67PlSfWv7zXXozXlQKBgQDRkexOrH5mqFLQuBHTxsGTsW2U2+ic2VIC\n+nROeTVrueIBRW/mW655fycpuiLwxBsrbuyjzWtaGCFMCMKkqT0cFovCSubJPwKc\n4onqyaeG/02uV6tg6xlauzFPSVe0rpgh2GqZ1PdS90ATBB5Kp0RxYtxdTvxZmjxD\nuSiTYLe8FwKBgQCoA227KnhoWdyFl5JCoZ1FdGdjvdFz4QZOuyeE4Yv6iM5xE/OK\npgxJOgjBfcZFeTjBQpzNnezo6lexuQFlSp+MSaPTZ9b25LoCajA+FxePBzmg32Vc\n5IZbM9AMlAb0A52FMn9Vd33GmIXcSY8uV9Sk/xulqSPqyl1KlnZr/AsP/QKBgQDB\nVPgGQDU/qSr1J8oyb5pnEPjBqfm2sPlqi/i96C2zGsF3YMJxZcTYisfrQ682JAPY\nlrUyC7BsZfRZu38s/n/EqLv32rd7kmhrqMWI1s14yY+1NWWBvIEgZa6AsW163tKz\n7n2xOnmLjVML9/Gl9xc57vTSE6rTUmkkJO1cwI3fswKBgFWvEpgDYyYuA1qAP4S3\nii62qW4gE09DEe72yUgh7sqSCv9VnfeYYd606f2P+mUFleYzpyuDEyd74Qw0r2Pi\nllhsMg7hlFp9VTNwbDeF8TjSO9RHAOVkyeVzM8vuoBthA1E1ETK45Z50gtF6iPZT\nNNP1Z4MPScPEsc6BNRyZm4HZ\n-----END PRIVATE KEY-----\n",
+  "client_email": "atualizardocusign@eminent-wares-459317-j6.iam.gserviceaccount.com",
+  "client_id": "114744730935574462248",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/atualizardocusign%40eminent-wares-459317-j6.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

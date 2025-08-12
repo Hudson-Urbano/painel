@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: flask-interface-jira
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn JiraFrontapp:app
+    envVars:
+      - key: PG_HOST
+        value: seu_host_postgres
+      - key: PG_USER
+        value: seu_usuario_postgres
+      - key: PG_PASSWORD
+        value: sua_senha_postgres
+      - key: PG_DATABASE
+        value: seu_database_postgres
+      - key: JIRA_URL
+        value: sua_url_jira
+      - key: JIRA_EMAIL
+        value: seu_email_jira
+      - key: JIRA_TOKEN
+        value: seu_token_jira
+      - key: PROJETO
+        value: LCSD
+      - key: SHEET_ID
+        value: seu_sheet_id
+      - key: CRED_FILE
+        value: credenciais.json
+      - key: FLASK_ENV
+        value: production
