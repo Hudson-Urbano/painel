@@ -15,7 +15,7 @@ PG_HOST = os.getenv("PG_HOST")
 PG_USER = os.getenv("PG_USER")
 PG_PASSWORD = os.getenv("PG_PASSWORD")
 PG_DATABASE = os.getenv("PG_DATABASE")
-PG_PORT = os.getenv("PG_PORT", 5432)
+PG_PORT = int(os.getenv("PG_PORT", 5432))  # Converter para inteiro
 
 # Google Sheets
 SHEET_ID = "1aj2jk71FoC_wvzsEu3-mcdzKahpi6TdnUjdSoiQsYlk"
@@ -29,7 +29,7 @@ conn = psycopg.connect(
     dbname=PG_DATABASE,
     port=PG_PORT
 )
-conn.set_client_encoding('UTF8')
+conn.execute("SET CLIENT_ENCODING TO 'UTF8'")
 cursor = conn.cursor()
 
 # ==================== Atualizar aba CONSULTA JURÍDICA ====================
@@ -46,7 +46,8 @@ def atualizar_consulta_juridica():
     aba = planilha.worksheet("CONSULTA JURÍDICA")
 
     linhas = aba.get_all_values()
-    mapa = {linha[0]: idx + 1 for idx, linha in enumerate(linhas[1:]) if len(linha) > 0}
+    # Mapa chave -> linha real na planilha (considerando cabeçalho na linha 1)
+    mapa = {linha[0]: idx + 2 for idx, linha in enumerate(linhas[1:]) if len(linha) > 0}
 
     cursor.execute("SELECT chave, resumo, responsavel, status FROM tarefas_jira")
     tarefas = cursor.fetchall()
@@ -58,7 +59,7 @@ def atualizar_consulta_juridica():
         resumo_upper = resumo.upper()
 
         if "CONSULTA JURÍDICA" in resumo_upper and chave in mapa:
-            linha_idx = mapa[chave] + 1
+            linha_idx = mapa[chave]  # linha real já calculada no mapa
             atualizacoes.extend([
                 gspread.Cell(row=linha_idx, col=4, value=responsavel),  # Coluna D
                 gspread.Cell(row=linha_idx, col=7, value=status),       # Coluna G
