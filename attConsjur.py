@@ -1,7 +1,7 @@
 import os
 import base64
 import requests
-import psycopg2
+import psycopg
 from datetime import datetime
 from dotenv import load_dotenv
 import gspread
@@ -22,7 +22,7 @@ SHEET_ID = "1aj2jk71FoC_wvzsEu3-mcdzKahpi6TdnUjdSoiQsYlk"
 CRED_FILE = "credenciais.json"
 
 # ==================== Conexão com o banco de dados ====================
-conn = psycopg2.connect(
+conn = psycopg.connect(
     host=PG_HOST,
     user=PG_USER,
     password=PG_PASSWORD,
