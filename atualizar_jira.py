@@ -1,7 +1,7 @@
 import os
 import base64
 import requests
-import psycopg2
+import psycopg
 from psycopg2.extras import execute_values
 from datetime import datetime
 from dotenv import load_dotenv
@@ -30,7 +30,7 @@ SHEET_ID = "1aj2jk71FoC_wvzsEu3-mcdzKahpi6TdnUjdSoiQsYlk"
 CRED_FILE = "credenciais.json"
 
 # ==================== Conexão com PostgreSQL ====================
-conn = psycopg2.connect(
+conn = psycopg.connect(
     host=os.getenv("PG_HOST"),
     user=os.getenv("PG_USER"),
     password=os.getenv("PG_PASSWORD"),
