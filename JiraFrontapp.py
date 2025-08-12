@@ -5,6 +5,7 @@ from datetime import datetime
 import logging
 import copy
 import sys
+import psycopg
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = "segredo"
