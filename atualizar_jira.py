@@ -2,7 +2,6 @@ import os
 import base64
 import requests
 import psycopg
-from psycopg2.extras import execute_values
 from datetime import datetime
 from dotenv import load_dotenv
 from tabulate import tabulate
@@ -23,7 +22,7 @@ PG_HOST = os.getenv("PG_HOST")
 PG_USER = os.getenv("PG_USER")
 PG_PASSWORD = os.getenv("PG_PASSWORD")
 PG_DATABASE = os.getenv("PG_DATABASE")
-PG_PORT = os.getenv("PG_PORT", 5432)  # Porta padrão 5432
+PG_PORT = int(os.getenv("PG_PORT", 5432))  # garantir int
 
 # Google Sheets
 SHEET_ID = "1aj2jk71FoC_wvzsEu3-mcdzKahpi6TdnUjdSoiQsYlk"
@@ -31,16 +30,16 @@ CRED_FILE = "credenciais.json"
 
 # ==================== Conexão com PostgreSQL ====================
 conn = psycopg.connect(
-    host=os.getenv("PG_HOST"),
-    user=os.getenv("PG_USER"),
-    password=os.getenv("PG_PASSWORD"),
-    dbname=os.getenv("PG_DATABASE"),
-    port=os.getenv("PG_PORT", 5432),
+    host=PG_HOST,
+    user=PG_USER,
+    password=PG_PASSWORD,
+    dbname=PG_DATABASE,
+    port=PG_PORT,
 )
-conn.autocommit = False  # Controlar commit manualmente
+conn.autocommit = False  # controle manual do commit
 cursor = conn.cursor()
 
-# ==================== Criação de tabela ====================
+# ==================== Criação da tabela ====================
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS tarefas_jira (
         chave VARCHAR(20) PRIMARY KEY,
@@ -88,7 +87,7 @@ for issue in dados["issues"]:
         responsavel = issue["fields"]["assignee"]["displayName"] if issue["fields"]["assignee"] else "Não atribuído"
         relator = issue["fields"]["reporter"]["displayName"]
         status = issue["fields"]["status"]["name"]
-        criado = datetime.strptime(criado, "%Y-%m-%dT%H:%M:%S.%f%z").astimezone().strftime("%Y-%m-%d %H:%M:%S")
+        criado_dt = datetime.strptime(criado, "%Y-%m-%dT%H:%M:%S.%f%z").astimezone()
 
         # UPSERT no PostgreSQL com ON CONFLICT
         cursor.execute("""
@@ -101,7 +100,7 @@ for issue in dados["issues"]:
                 relator = EXCLUDED.relator,
                 status = EXCLUDED.status,
                 updated_at = CURRENT_TIMESTAMP
-        """, (id_tarefa, criado, resumo, responsavel, relator, status))
+        """, (id_tarefa, criado_dt, resumo, responsavel, relator, status))
 
     except Exception as e:
         print(f"Erro ao inserir tarefa do Jira {issue['key']}: {e}")
@@ -131,7 +130,8 @@ def atualizar_google_sheets():
     aba_elaboracao = planilha.worksheet("CONTRATOS")
 
     linhas_elaboracao = aba_elaboracao.get_all_values()
-    mapa_elaboracao = {linha[0]: idx + 1 for idx, linha in enumerate(linhas_elaboracao[1:]) if len(linha) > 0}
+    mapa_elaboracao = {linha[0]: idx + 2 for idx, linha in enumerate(linhas_elaboracao[1:]) if len(linha) > 0}
+    # +2 pois planilha começa na linha 1 e header
 
     cursor.execute("SELECT chave, criado, status, resumo, responsavel, relator FROM tarefas_jira")
     tarefas = cursor.fetchall()
@@ -143,7 +143,7 @@ def atualizar_google_sheets():
         resumo_upper = resumo.upper()
 
         if "ELABORAÇÃO" in resumo_upper and chave in mapa_elaboracao:
-            linha_idx = mapa_elaboracao[chave] + 1
+            linha_idx = mapa_elaboracao[chave]
             atualizacoes_elaboracao.extend([
                 gspread.Cell(row=linha_idx, col=10, value=status),
                 gspread.Cell(row=linha_idx, col=5, value=responsavel),
