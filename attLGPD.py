@@ -21,7 +21,7 @@ PG_HOST = os.getenv("PG_HOST")
 PG_USER = os.getenv("PG_USER")
 PG_PASSWORD = os.getenv("PG_PASSWORD")
 PG_DATABASE = os.getenv("PG_DATABASE")
-PG_PORT = os.getenv("PG_PORT", 5432)
+PG_PORT = int(os.getenv("PG_PORT", 5432))  # converter para inteiro
 
 # Google Sheets
 SHEET_ID = "1aj2jk71FoC_wvzsEu3-mcdzKahpi6TdnUjdSoiQsYlk"
@@ -35,7 +35,7 @@ conn = psycopg.connect(
     dbname=PG_DATABASE,
     port=PG_PORT
 )
-conn.set_client_encoding('UTF8')
+conn.execute("SET CLIENT_ENCODING TO 'UTF8'")
 cursor = conn.cursor()
 
 # ==================== Atualizar aba COMPLIANCE & LGPD ====================
@@ -52,7 +52,8 @@ def atualizar_compliance_lgpd():
     aba = planilha.worksheet("COMPLIANCE & LGPD")
 
     linhas = aba.get_all_values()
-    mapa = {linha[0]: idx + 1 for idx, linha in enumerate(linhas[1:]) if len(linha) > 0}
+    # Cria mapa: chave -> número da linha real na planilha (linha 2 em diante)
+    mapa = {linha[0]: idx + 2 for idx, linha in enumerate(linhas[1:]) if len(linha) > 0}
 
     cursor.execute("SELECT chave, resumo, responsavel, status FROM tarefas_jira")
     tarefas = cursor.fetchall()
@@ -64,7 +65,7 @@ def atualizar_compliance_lgpd():
         resumo_upper = resumo.upper()
 
         if ("COMPLIANCE" in resumo_upper or "LGPD" in resumo_upper) and chave in mapa:
-            linha_idx = mapa[chave] + 1
+            linha_idx = mapa[chave]  # índice real da linha na planilha
             atualizacoes.extend([
                 gspread.Cell(row=linha_idx, col=8, value=status),       # Coluna H
                 gspread.Cell(row=linha_idx, col=5, value=responsavel),  # Coluna E
