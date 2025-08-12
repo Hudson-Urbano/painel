@@ -3,8 +3,8 @@ import subprocess
 import threading
 from datetime import datetime
 import logging
-from waitress import serve
 import copy
+import sys
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.secret_key = "segredo"
@@ -23,7 +23,6 @@ status_execucao = {
 
 status_lock = threading.Lock()
 
-
 def executar_script(nome_script):
     with status_lock:
         status_execucao[nome_script]["status"] = "executando"
@@ -31,7 +30,16 @@ def executar_script(nome_script):
     logging.info(f"Iniciando script {nome_script}")
 
     try:
-        subprocess.run(["python", SCRIPTS[nome_script]], check=True)
+        result = subprocess.run(
+            [sys.executable, SCRIPTS[nome_script]],
+            capture_output=True,
+            text=True,
+            check=False  # vamos tratar erro abaixo
+        )
+        logging.info(f"[{nome_script}] stdout:\n{result.stdout}")
+        if result.returncode != 0:
+            logging.error(f"[{nome_script}] stderr:\n{result.stderr}")
+            raise subprocess.CalledProcessError(result.returncode, result.args)
         status = "sucesso"
         logging.info(f"Script {nome_script} executado com sucesso")
     except subprocess.CalledProcessError as e:
@@ -45,13 +53,11 @@ def executar_script(nome_script):
             status_execucao[nome_script]["status"] = status
             status_execucao[nome_script]["ultima_execucao"] = datetime.now().strftime("%d/%m/%Y %H:%M")
 
-
 @app.route("/")
 def home():
     with status_lock:
         status = copy.deepcopy(status_execucao)
     return render_template("index.html", status=status)
-
 
 @app.route("/executar/<nome>", methods=["POST"])
 def executar(nome):
@@ -70,13 +76,10 @@ def executar(nome):
     flash(f"⏳ Atualização '{nome}' iniciada...", "info")
     return redirect(url_for("home"))
 
-
 @app.route("/status")
 def status():
     with status_lock:
         return jsonify(copy.deepcopy(status_execucao))
 
-
 if __name__ == "__main__":
-    print("🚀 Servidor iniciado em http://127.0.0.1:5000")
-    serve(app, host="127.0.0.1", port=5000)
+    app.run(debug=True)
